@@ -3,13 +3,13 @@ import numpy as np
 import mathmethods as mm
 
 
-def drawUIR():
+def drawUIR(da, ec):
     data = [dict(
         visible=False,
         line=dict(color='00CED1', width=6),
         name='r = ' + str(step),
         x=np.arange(100),
-        y=[mm.u(step, t) for t in np.arange(100)]) for step in np.arange(0, 5, 0.1)]
+        y=[mm.u(step, t, ec, da) for t in np.arange(100)]) for step in np.arange(0, 5, 0.1)]
 
     steps = []
     for i in range(len(data)):

@@ -48,11 +48,21 @@ def gamma(n):
 def expY(n, t):
    return sp.exp(gamma(n)*t) - 1
 
-def u(r,t, dan = None):
+
+def last(eso):
+    tt = 25 * da['betta']*2**(1/2)
+    tt*= da['P']
+    tt*= 0.5815169517
+    tt*= da['c']
+    tt /= da['R']*eso*(sp.pi)**(1/2)
+    return round(tt**(2/3))
+
+
+def u(r,t, eco, dan=None):
     if dan != None:
         updateDA(dan)
     u = -1*da['c']*da['l']*da['betta']*da['P'] * (sp.exp(-2*da['alf']*t/(da['c']*da['l'])) - 1)/(25*sp.pi*2*da['alf']*da['a']**2)
-    for i in np.arange(1,100,1):
+    for i in np.arange(1,last(eco),1):
         mn = bessel0(i)
         u +=bn(i) * expY(i, t) * spc.j0(mn * r / da['R']) / gamma(i)
     return u
@@ -61,11 +71,11 @@ def graphR():
     mpl.figure(0)
     res0, res1, res2, res3, res4, res5 = [], [], [], [], [], []
     x = [t for t in range(100)]
-    res0 = [u(0, t) for t in x]
-    res1 = [u(1, t) for t in x]
-    res2 = [u(2, t) for t in x]
-    res3 = [u(3, t) for t in x]
-    res4 = [u(4, t) for t in x]
+    res0 = [u(0, t,0.1) for t in x]
+    res1 = [u(1, t, 0.1) for t in x]
+    res2 = [u(2, t,0.1) for t in x]
+    res3 = [u(3, t, 0.1) for t in x]
+    res4 = [u(4, t,0.1) for t in x]
     ln0, ln1, ln2, ln3, ln4 = mpl.plot(x, res0, x, res1, x, res2, x, res3, x, res4)
     mpl.legend((ln0, ln1, ln2, ln3, ln4), ('r=0','r=1','r=2','r=3','r=4'))
     mpl.grid()
@@ -76,11 +86,11 @@ def graphT():
     mpl.figure(1)
     res0, res1, res2, res3, res4, res5 = [], [], [], [], [], []
     x = [t for t in np.arange(0,5,0.1)]
-    res0 = [u(t, 0) for t in x]
-    res1 = [u(t, 20) for t in x]
-    res2 = [u(t, 40) for t in x]
-    res3 = [u(t, 60) for t in x]
-    res4 = [u(t, 80) for t in x]
+    res0 = [u(t, 0,0.1) for t in x]
+    res1 = [u(t, 20,0.1) for t in x]
+    res2 = [u(t, 40,0.1) for t in x]
+    res3 = [u(t, 60,0.1) for t in x]
+    res4 = [u(t, 80,0.1) for t in x]
     ln0, ln1, ln2, ln3, ln4 = mpl.plot(x, res0, x, res1, x, res2, x, res3, x, res4)
     mpl.legend((ln0, ln1, ln2, ln3, ln4), ('t=0','t=20','t=40','t=60','t=80'))
    # mpl.plot(x, res0)
@@ -91,6 +101,8 @@ def graphT():
     mpl.legend((ln0, ln1), ('t=0', 't=40'))'''
     mpl.grid()
 
+def getparams():
+    return da
 
 '''graphR()
 graphT()

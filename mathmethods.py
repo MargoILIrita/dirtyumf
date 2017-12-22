@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as mpl
 
 __bessel0 = [0,]
-temp = spc.jn_zeros(1, 10000)
+temp = spc.jn_zeros(1, 1000000)
 for t in temp:
     __bessel0.append(t)
 
@@ -49,7 +49,8 @@ def expY(n, t):
    return sp.exp(gamma(n)*t) - 1
 
 
-def last(eso):
+def last(eo):
+    eso = 10**(-eo)
     tt = 25 * da['betta']*2**(1/2)
     tt*= da['P']
     tt*= 0.5815169517

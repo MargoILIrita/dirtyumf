@@ -51,12 +51,11 @@ def expY(n, t):
 
 def last(eo):
     eso = 10**(-eo)
-    tt = 25 * da['betta']*2**(1/2)
+    tt = 50 * da['betta']*2**(1/2)
     tt*= da['P']
     tt*= 0.5815169517
-    tt*= da['c']
-    tt /= da['R']*eso*(sp.pi)**(1/2)
-    return round(tt**(2/3))
+    tt /= -3*da['R']*eso*(sp.pi)**(1/2)
+    return round(tt**(2))
 
 
 def u(r,t, eco, dan=None):

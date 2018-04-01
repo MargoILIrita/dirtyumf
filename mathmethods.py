@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as mpl
 
 __bessel0 = [0,]
-temp = spc.jn_zeros(1, 1000000)
+temp = spc.jn_zeros(1, 10000000)
 for t in temp:
     __bessel0.append(t)
 
@@ -25,6 +25,9 @@ def updateDA(dan):
     da['P'] = dan['P']
     da['a'] = dan['a']
 
+def rt(n):
+    ayyy = 50*0.5815169517*da['betta']*da['P']*2**(1/2)
+    return ayyy/(da['R']*(n*sp.pi)**(1/2))
 
 
 def besfun(n):
@@ -49,20 +52,11 @@ def expY(n, t):
    return sp.exp(gamma(n)*t) - 1
 
 
-def last(eo):
-    eso = 10**(-eo)
-    tt = 50 * da['betta']*2**(1/2)
-    tt*= da['P']
-    tt*= 0.5815169517
-    tt /= -3*da['R']*eso*(sp.pi)**(1/2)
-    return round(tt**(2))
-
-
 def u(r,t, eco, dan=None):
     if dan != None:
         updateDA(dan)
     u = -1*da['c']*da['l']*da['betta']*da['P'] * (sp.exp(-2*da['alf']*t/(da['c']*da['l'])) - 1)/(25*sp.pi*2*da['alf']*da['a']**2)
-    for i in np.arange(1,last(eco),1):
+    for i in np.arange(1,1000,1):
         mn = bessel0(i)
         u +=bn(i) * expY(i, t) * spc.j0(mn * r / da['R']) / gamma(i)
     return u

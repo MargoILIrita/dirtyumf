@@ -30,8 +30,8 @@ def q0(ht, hr):
     return 4*psi()*ht/hr**2
 
 
-def s0(w, ri, ht):
-    return w + fi(ri)*ht
+def s0(w, ht):
+    return w + fi(0)*ht
 
 
 def ppi(hr, ht):
@@ -59,27 +59,27 @@ def pI(ht, hr):
 
 
 def sI(w, ri, ht):
-    return w + fi(ri)*ht
+    return w + fi(5)*ht
 
 
 def alfa1(ht, hr):
     return q0(ht, hr)/p0(ht, hr)
 
 
-def betta1(w, ri, ht, hr):
-    return s0(w, ri, ht)/p0(ht, hr)
+def betta1(w, ht, hr):
+    return s0(w, ht)/p0(ht, hr)
 
 
 #alfa j
 #ri для j-1, alf для j-1
-def alfaj(ht,hr,ri,alf):
-    return qqi(ht,hr,ri)/(uui(ht,hr,ri)*alf)
+def alfaj(q, p, u, al):
+    return q/(p-u*al)
 
 
 #b k-1 j
 #ri для j-1, alf для j-1, betta для j-1
-def bettaj(w, ht, hr, betta, ri, alf):
-    return (ssi(w,ri, ht) + uui(ht,hr,ri)*betta)/(ppi(hr,ht) - uui(ht,hr,ri)*alf)
+def bettaj(s, u, bet, p, al):
+    return (s+u*bet)/(p-u*al)
 
 
 #w k I
@@ -95,13 +95,33 @@ def wm(alf, bett, w):
 
 
 def straight_run(ht, hr, I, ris, ws):
+    ss = []
+    ps = []
+    qs = []
+    for i in range(I):
+        if i == 0:
+            ss.append(s0(ws[0],ht))
+            ps.append(p0(ht, hr))
+            qs.append(q0(ht,hr))
+        elif i == I-1:
+            ss.append(sI(ws[i], ris[i], ht))
+            ps.append(pI(ht,hr))
+            qs.append(qqi(ht, hr, ris[i]))
+        else:
+            ss.append(ssi(ws[i],ris[i],ht))
+            ps.append(ppi(hr,ht))
+            qs.append(qqi(ht,hr,ris[i]))
+    us = []
     alfas = []
     bettas = []
     alfas.append(alfa1(ht, hr))
-    bettas.append(betta1(ws[0], ris[0], ht, hr))
+    bettas.append(betta1(ws[0], ht, hr))
+    us.append(uui(hr,ht,ris[1]))
     for j in range(1,I,1):
-        alfas.append(alfaj(ht,hr,ris[j], alfas[j-1]))
-        bettas.append(bettaj(ws[j],ht,hr,bettas[j-1],ris[j],alfas[j-1]))
+        i = j-1
+        alfas.append(alfaj(qs[j], ps[j], us[i], alfas[i]))
+        bettas.append(bettaj(ss[j],us[i], bettas[i], ps[j], alfas[i]))
+        us.append(uui(hr, ht, ris[j]))
     return alfas, bettas
 
 
@@ -127,6 +147,7 @@ def allinone(ht, hr):
     ris = [x for x in numpy.arange(0,mm.da['R'],hr)]
     for k in range(1, K, 1):
         w.append(back_stroke(ht,hr,I, ris,w[k-1]))
+    return w
 
 
 

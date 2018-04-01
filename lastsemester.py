@@ -1,9 +1,12 @@
 import math
+
+from plotly.utils import numpy
+
 import mathmethods as mm
 
 def ir(ri):
     if(0 <= ri <= mm.da['a']):
-        return mm.da['P']/(math.pi*mm.da['a'])
+        return mm.da['P']/(math.pi*mm.da['a']**2)
     return 0
 
 
@@ -74,9 +77,9 @@ def alfaj(ht,hr,ri,alf):
 
 
 #b k-1 j
-#ri1 для j-1, ri для j, alf для j, betta для j-1
-def bettaj(w, ri1, ht, hr, betta, ri, alf):
-    return (ssi(w,ri1, ht) + uui(ht,hr,ri1)*betta)/(ppi(hr,ht) - uui(ht,hr,ri)*alf)
+#ri для j-1, alf для j-1, betta для j-1
+def bettaj(w, ht, hr, betta, ri, alf):
+    return (ssi(w,ri, ht) + uui(ht,hr,ri)*betta)/(ppi(hr,ht) - uui(ht,hr,ri)*alf)
 
 
 #w k I
@@ -87,7 +90,46 @@ def wI(w, ri, ht, hr, bettaI, alf):
 
 #w k m
 #bett for m+1 k, alf for m+1, w for m+1 k
-def wm(ht, hr, ri, alf, bett, w):
-    return alfaj(ht, hr, ri, alf)*w + bett
+def wm(alf, bett, w):
+    return alf*w + bett
+
+
+def straight_run(ht, hr, I, ris, ws):
+    alfas = []
+    bettas = []
+    alfas.append(alfa1(ht, hr))
+    bettas.append(betta1(ws[0], ris[0], ht, hr))
+    for j in range(1,I,1):
+        alfas.append(alfaj(ht,hr,ris[j], alfas[j-1]))
+        bettas.append(bettaj(ws[j],ht,hr,bettas[j-1],ris[j],alfas[j-1]))
+    return alfas, bettas
+
+
+def back_stroke(ht, hr, I, ris, ws):
+    alfas, bettas = straight_run(ht, hr, I, ris, ws)
+    wnew = []
+    wnew.append(wI(ws[I-1],ris[I-1], ht, hr, bettas[I-1], alfas[I-1]))
+    for i in range(I-2, -1, -1):
+        wnew.append(wm(alfas[i],bettas[i], wnew[I-i-2]))
+    wn = []
+    for i in range(I-1,-1,-1):
+        wn.append(wnew[i])
+    print(wn)
+    return wn
+
+def allinone(ht, hr):
+    t = []
+    I = int(mm.da['R']/hr)
+    K = int(100/hr)
+    for i in range(I):
+        t.append(0)
+    w = [t,]
+    ris = [x for x in numpy.arange(0,mm.da['R'],hr)]
+    for k in range(1, K, 1):
+        w.append(back_stroke(ht,hr,I, ris,w[k-1]))
+
+
+
+
 
 

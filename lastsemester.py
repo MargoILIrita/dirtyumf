@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as mpl
 
 from plotly.utils import numpy
 
@@ -69,20 +70,24 @@ def betta0(w, ht, hr):
 
 #alfa j
 #ri для j-1, alf для j-1
-def alfaj(q, p, u, al):
-    return q/(u*al + p)
+def alfaj(ht, hr, ri, alfa):
+    return qqi(ht, hr, ri)/( ppi(ht, ht) + uui(ht, hr, ri)* alfa)
+
 
 
 #b k-1 j
 #ri для j-1, alf для j-1, betta для j-1
-def bettaj(s, u, bet, p, al):
-    return (s - bet*u)/(u*al + p)
+def bettaj(w, ri, ht, hr, betta, alfa):
+    u = uui(ht, hr, ri)
+    return (ssi(w, ri, ht) + u* betta)/(ppi(hr, ht) + alfa*u)
 
 
 #w k I
 #betta for I k-1, alf for I
-def wI(s,u, p, bet, alf):
-    return (s - u*bet)/(p+u*alf)
+def wI(w, ri, ht, hr, betta, alfa):
+    u = uI(hr, ht, ri)
+    return (sI(w, ri, ht) - u*betta)/(pI(ht, hr, ri) + alfa*u)
+
 
 
 #w k m
@@ -97,9 +102,9 @@ def straight_run(ht, hr, I, ris, ws):
     alfas.append(alfa0(ht, hr))
     bettas.append(betta0(ws[0], ht, hr))
     for j in range(1,I-1,1):
-        alfas.append(alfaj(qqi(ht,hr,ris[j]),ppi(ht,ht),uui(ht,hr,ris[j]),alfas[j-1]))
-        bettas.append(bettaj(ssi(ws[j], ris[j], ht),uui(ht,hr, ris[j]),bettas[j-1],ppi(hr, ht),alfas[j-1]))
-    return alfas, bettas, wI(sI(ws[I-1],ris[I-1], ht),uI(hr, ht,ris[I-1]),pI(ht, hr, ris[I-1]),bettas[I-2],alfas[I-2])
+        alfas.append(alfaj(ht, hr, ris[j], alfas[j-1]))
+        bettas.append(bettaj(ws[j], ris[j], ht, hr, bettas[j-1], alfas[j-1]))
+    return alfas, bettas, wI(ws[I-1],ris[I-1], ht, hr, bettas[I-2], alfas[I-2])
 
 
 def back_stroke(ht, hr, I, ris, ws):
@@ -114,10 +119,10 @@ def back_stroke(ht, hr, I, ris, ws):
    # print(wn)
     return wn
 
-def allinone(ht, hr):
+def allinone(ht, hr, time=100):
     t = []
     I = int(mm.da['R']/hr)
-    K = int(100/hr)
+    K = int(time/ht)
     for i in range(I):
         t.append(0)
     w = [t,]
@@ -128,13 +133,17 @@ def allinone(ht, hr):
 
 
 
-a = allinone(1, 0.1)
-b = []
-for t in numpy.arange(100):
-   b.append([mm.u(step, t, 0.01) for step in numpy.arange(0, 5, 0.1)])
+#a = allinone(1, 0.1)
+#b = []
+#for t in numpy.arange(100):
+#   b.append([mm.u(step, t, 0.01) for step in numpy.arange(0, 5, 0.1)])
 
-for i in range(100):
-    print("new {0}".format(a[i]))
-    print("old {0}".format(b[i]))
+x = [step for step in numpy.arange(0, 5, 0.1)]
+y1 = [mm.u(step,5, 0.01) for step in x]
+y2 = allinone(1,0.1,6)[5]
 
+ln0, ln1 = mpl.plot(x, y1, x, y2)
+mpl.legend((ln0, ln1),('Аналитическое','Численное'))
+mpl.grid()
+mpl.show()
 

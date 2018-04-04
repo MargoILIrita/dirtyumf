@@ -37,7 +37,7 @@ def ppi(hr, ht):
 
 
 def uui(ht, hr, ri):
-    return gamma(ht, hr)*(hr/(2*ri) - 1)
+    return gamma(ht, hr)*(1-hr/(2*ri))
 
 
 def qqi(ht, hr, ri):
@@ -79,7 +79,7 @@ def alfaj(ht, hr, ri, alfa):
 #ri для j-1, alf для j-1, betta для j-1
 def bettaj(w, ri, ht, hr, betta, alfa):
     u = uui(ht, hr, ri)
-    return (ssi(w, ri, ht) + u* betta)/(ppi(hr, ht) + alfa*u)
+    return (ssi(w, ri, ht) - u* betta)/(ppi(hr, ht) + alfa*u)
 
 
 #w k I
@@ -138,12 +138,11 @@ def allinone(ht, hr, time=100):
 #for t in numpy.arange(100):
 #   b.append([mm.u(step, t, 0.01) for step in numpy.arange(0, 5, 0.1)])
 
-x = [step for step in numpy.arange(0, 5, 0.1)]
+'''x = [step for step in numpy.arange(0, 5, 0.1)]
 y1 = [mm.u(step,5, 0.01) for step in x]
 y2 = allinone(1,0.1,6)[5]
 
 ln0, ln1 = mpl.plot(x, y1, x, y2)
 mpl.legend((ln0, ln1),('Аналитическое','Численное'))
 mpl.grid()
-mpl.show()
-
+mpl.show()'''

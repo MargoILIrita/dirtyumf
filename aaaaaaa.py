@@ -32,10 +32,10 @@ riarr = [st for st in np.arange(0,radius-stepr,stepr)]
 w = [np.zeros((riarr.__len__(),1)),]
 for k in range(1,100,stept):
     w.append(findW(w[k-1], stept, stepr,riarr))
-y1 = [mm.u(step,16, 0.1) for step in riarr]
-y2 = [el for el in w[16].flat]
+y1 = [mm.u(step,1, 0.1) for step in riarr]
+y2 = [el for el in w[1].flat]
 
 ln0, ln1 = mpl.plot(riarr, y1, riarr, y2)
-mpl.legend((ln0, ln1),('Аналитическое','Численное'))
+mpl.legend((ln0, ln1),('Аналитическое при t = {0}'.format(1),'Численное'))
 mpl.grid()
 mpl.show()

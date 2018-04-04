@@ -3,32 +3,39 @@ import numpy as np
 import mathmethods as mm
 import matplotlib.pyplot as mpl
 
-ris = [st for st in np.arange(0,4.999,0.001)]
+def findW(w, ht, hr, ris):
+    len = ris.__len__()
+    s0 = []
+    j = 0
+    for ri in ris:
+        if (ri == 0):
+            s0.append([ls.s0(0, ht),])
+        else:
+            s0.append([ls.ssi(w[j],ri, ht),])
+        j+=1
+    s = np.matrix(s0)
+    a = np.zeros((len,len))
+    a[0,0] = ls.p0(ht,hr)
+    a[0,1] = -1*ls.q0(ht,hr)
+    a[len-1,len-2] = -1*ls.uI(hr, ht, ris[len-1])
+    a[len-1,len-1] = ls.pI(ht, hr, ris[len-1])
+    for i in np.arange(1,len-1,1):
+        a[i, i-1] = -1*ls.uui(ht, hr, ris[i])
+        a[i, i] = ls.ppi(hr, ht, ris[i])
+        a[i,i+1] = -1 * ls.qqi(ht, hr, ris[i])
+    return np.linalg.solve(a,s)
 
-s0 = []
-for ri in ris:
-    if (ri == 0):
-        s0.append([ls.s0(0, 1),])
-    else:
-        s0.append([ls.ssi(0,ri, 1),])
-s = np.matrix(s0)
-a = np.zeros((4999,4999))
-a[0,0] = ls.p0(1,0.001)
-a[0,1] = -1*ls.q0(1,0.001)
-a[4998,4997] = -1*ls.uI(0.001, 1, ris[4998])
-a[4998,4998] = ls.pI(1, 0.001, ris[4998])
-for i in np.arange(1,4998,1):
-    a[i, i-1] = -1*ls.uui(1, 0.001, ris[i])
-    a[i, i] = ls.ppi(0.001, 1, ris[i])
-    a[i,i+1] = -1 * ls.qqi(1, 0.001, ris[i])
-print(a)
-w = np.linalg.solve(a,s)
-print(w)
+radius = 5
+stepr = 0.1
+stept = 1
+riarr = [st for st in np.arange(0,radius-stepr,stepr)]
+w = [np.zeros((riarr.__len__(),1)),]
+for k in range(1,100,stept):
+    w.append(findW(w[k-1], stept, stepr,riarr))
+y1 = [mm.u(step,1, 0.1) for step in riarr]
+y2 = [el for el in w[1].flat]
 
-y1 = [mm.u(step,1, 0.1) for step in ris]
-y2 = [el for el in w.flat]
-
-ln0, ln1 = mpl.plot(ris, y1, ris, y2)
+ln0, ln1 = mpl.plot(riarr, y1, riarr, y2)
 mpl.legend((ln0, ln1),('Аналитическое','Численное'))
 mpl.grid()
 mpl.show()

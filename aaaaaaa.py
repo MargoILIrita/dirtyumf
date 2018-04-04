@@ -3,7 +3,7 @@ import numpy as np
 import mathmethods as mm
 import matplotlib.pyplot as mpl
 
-ris = [st for st in np.arange(0,4.9,0.1)]
+ris = [st for st in np.arange(0,4.999,0.001)]
 
 s0 = []
 for ri in ris:
@@ -12,15 +12,15 @@ for ri in ris:
     else:
         s0.append([ls.ssi(0,ri, 1),])
 s = np.matrix(s0)
-a = np.zeros((49,49))
-a[0,0] = ls.p0(1,0.1)
-a[0,1] = -1*ls.q0(1,0.1)
-a[48,47] = -1*ls.uI(0.1, 1, ris[48])
-a[48,48] = ls.pI(1, 0.1, ris[48])
-for i in np.arange(1,48,1):
-    a[i, i-1] = -1*ls.uui(1, 0.1, ris[i])
-    a[i, i] = ls.ppi(0.1, 1, ris[i])
-    a[i,i+1] = -1 * ls.qqi(1, 0.1, ris[i])
+a = np.zeros((4999,4999))
+a[0,0] = ls.p0(1,0.001)
+a[0,1] = -1*ls.q0(1,0.001)
+a[4998,4997] = -1*ls.uI(0.001, 1, ris[4998])
+a[4998,4998] = ls.pI(1, 0.001, ris[4998])
+for i in np.arange(1,4998,1):
+    a[i, i-1] = -1*ls.uui(1, 0.001, ris[i])
+    a[i, i] = ls.ppi(0.001, 1, ris[i])
+    a[i,i+1] = -1 * ls.qqi(1, 0.001, ris[i])
 print(a)
 w = np.linalg.solve(a,s)
 print(w)

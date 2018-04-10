@@ -37,11 +37,11 @@ def ppi(hr, ht):
 
 
 def uui(ht, hr, ri):
-    return gamma(ht, hr)*(1-hr/(2*ri))
+    return ht/(2*hr*ri) - gamma(ht, hr)
 
 
 def qqi(ht, hr, ri):
-    return gamma(ht,hr)*(hr/(2*ri) + 1)
+    return gamma(ht,hr) + ht/(2*hr*ri)
 
 
 def ssi(w, ri, ht):

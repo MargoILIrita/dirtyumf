@@ -1,5 +1,6 @@
 import lilya
 import  rita
+import olya
 import numpy as np
 import mathmethods as mm
 import matplotlib.pyplot as mpl
@@ -32,14 +33,17 @@ stept = 1
 riarr = [st for st in np.arange(0,radius-stepr,stepr)]
 wlilya = [np.zeros((riarr.__len__(), 1)), ]
 writa = [np.zeros((riarr.__len__(), 1)), ]
+wolya = [np.zeros((riarr.__len__(), 1)), ]
 for k in range(1,100,stept):
     wlilya.append(findW(wlilya[k - 1], stept, stepr, riarr, lilya))
     writa.append(findW(writa[k - 1], stept, stepr, riarr, rita))
+    wolya.append(olya.all(wolya[k-1],stept, stepr, riarr))
 y1 = [mm.u(step,1, 0.1) for step in riarr]
 y2 = [el for el in wlilya[1].flat]
 y3 = [ele for ele in writa[1].flat]
+y4 = wolya[1]
 
-ln0, ln1, ln2 = mpl.plot(riarr, y1, riarr, y2, riarr, y3)
-mpl.legend((ln0, ln1, ln2),('Аналитическое при t = {0}'.format(1),'Численное Лиля', "Численное Рита"))
+ln1, ln2, ln3 = mpl.plot(riarr, y2, riarr, y3, riarr, y4)
+mpl.legend((ln1, ln2, ln3),('Численное Лиля', "Численное Рита", 'Численное Оли'))
 mpl.grid()
 mpl.show()

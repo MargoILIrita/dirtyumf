@@ -1,9 +1,10 @@
-import lastsemester as ls
+import lilya
+import  rita
 import numpy as np
 import mathmethods as mm
 import matplotlib.pyplot as mpl
 
-def findW(w, ht, hr, ris):
+def findW(w, ht, hr, ris, ls):
     len = ris.__len__()
     s0 = []
     j = 0
@@ -29,13 +30,16 @@ radius = 5
 stepr = 0.1
 stept = 1
 riarr = [st for st in np.arange(0,radius-stepr,stepr)]
-w = [np.zeros((riarr.__len__(),1)),]
+wlilya = [np.zeros((riarr.__len__(), 1)), ]
+writa = [np.zeros((riarr.__len__(), 1)), ]
 for k in range(1,100,stept):
-    w.append(findW(w[k-1], stept, stepr,riarr))
+    wlilya.append(findW(wlilya[k - 1], stept, stepr, riarr, lilya))
+    writa.append(findW(writa[k - 1], stept, stepr, riarr, rita))
 y1 = [mm.u(step,1, 0.1) for step in riarr]
-y2 = [el for el in w[1].flat]
+y2 = [el for el in wlilya[1].flat]
+y3 = [ele for ele in writa[1].flat]
 
-ln0, ln1 = mpl.plot(riarr, y1, riarr, y2)
-mpl.legend((ln0, ln1),('Аналитическое при t = {0}'.format(1),'Численное'))
+ln0, ln1, ln2 = mpl.plot(riarr, y1, riarr, y2, riarr, y3)
+mpl.legend((ln0, ln1, ln2),('Аналитическое при t = {0}'.format(1),'Численное Лиля', "Численное Рита"))
 mpl.grid()
 mpl.show()

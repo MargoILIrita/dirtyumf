@@ -1,6 +1,6 @@
 import plotly.offline as py
 import numpy as np
-import lastsemester as ls
+import lilya as ls
 
 def drawUIT():
     data = [dict(

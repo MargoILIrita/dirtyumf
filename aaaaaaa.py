@@ -1,7 +1,5 @@
-import multiprocessing
-
 import lilya
-import rita
+import  rita
 import olya
 import numpy as np
 import mathmethods as mm
@@ -29,36 +27,23 @@ def findW(w, ht, hr, ris, ls):
         a[i,i+1] = -1 * ls.qqi(ht, hr, ris[i])
     return np.linalg.solve(a,s)
 
-def xOy(args):
-    stepr, stept, riarr, name = args[0], args[1], args[2], args[3]
-    res = [np.zeros((riarr.__len__(), 1)), ]
-    for k in range(1, 100, stept):
-        if name == 'olya':
-            res.append(olya.all(res[k - 1], stept, stepr, riarr))
-        elif name == 'lilya':
-            res.append(findW(res[k - 1], stept, stepr, riarr, lilya))
-        else: res.append(findW(res[k - 1], stept, stepr, riarr, rita))
-    return res
+radius = 5
+stepr = 0.1
+stept = 1
+riarr = [st for st in np.arange(0,radius-stepr,stepr)]
+wlilya = [np.zeros((riarr.__len__(), 1)), ]
+writa = [np.zeros((riarr.__len__(), 1)), ]
+wolya = [np.zeros((riarr.__len__(), 1)), ]
+for k in range(1,100,stept):
+    wlilya.append(findW(wlilya[k - 1], stept, stepr, riarr, lilya))
+    writa.append(findW(writa[k - 1], stept, stepr, riarr, rita))
+    wolya.append(olya.all(wolya[k-1],stept, stepr, riarr))
+y1 = [mm.u(step,1, 0.1) for step in riarr]
+y2 = [el for el in wlilya[1].flat]
+y3 = [ele for ele in writa[1].flat]
+y4 = wolya[1]
 
-if __name__ == '__main__':
-    print('start')
-    stepr = 0.1
-    stept = 1
-    riarr = [st for st in np.arange(0, 5 - stepr, stepr)]
-    pool = multiprocessing.Pool(processes=3, )
-    array = pool.map(xOy, [(stepr, stept, riarr, 'olya'),(stepr, stept, riarr, 'lilya'),(stepr, stept, riarr, 'rita')])
-    print('finish count new methods')
-    wolya, wlilya, writa = array[0], array[1], array[2]
-
-    y1 = [mm.u(step,1, 0.1) for step in riarr]
-    y2 = [el for el in wlilya[1].flat]
-    y3 = [ele for ele in writa[1].flat]
-    y4 = wolya[1]
-    print('{0}\n{1}\n{2}\n{3}'.format(y1,y2,y3,y4))
-
-    ln0, ln1, ln2, ln3 = mpl.plot(riarr, y1, riarr, y2, riarr, y3, riarr, y4)
-    mpl.legend((ln0, ln1, ln2, ln3), ('Аналитическое', 'Численное Лиля', "Численное Рита", 'Численное Оля'))
-    mpl.grid()
-    mpl.show()
-
-
+ln0 ,ln1, ln2, ln3 = mpl.plot(riarr, y1, riarr, y2, riarr, y3, riarr, y4)
+mpl.legend((ln0,ln1, ln2, ln3),('Аналитическое','Численное Лиля', "Численное Рита", 'Численное Оли'))
+mpl.grid()
+mpl.show()

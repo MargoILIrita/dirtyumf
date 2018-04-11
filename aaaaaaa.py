@@ -43,7 +43,7 @@ y2 = [el for el in wlilya[1].flat]
 y3 = [ele for ele in writa[1].flat]
 y4 = wolya[1]
 
-ln1, ln2, ln3 = mpl.plot(riarr, y2, riarr, y3, riarr, y4)
-mpl.legend((ln1, ln2, ln3),('Численное Лиля', "Численное Рита", 'Численное Оли'))
+ln0 ,ln1, ln2, ln3 = mpl.plot(riarr, y1, riarr, y2, riarr, y3, riarr, y4)
+mpl.legend((ln0,ln1, ln2, ln3),('Аналитическое','Численное Лиля', "Численное Рита", 'Численное Оли'))
 mpl.grid()
 mpl.show()

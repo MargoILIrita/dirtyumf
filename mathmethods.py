@@ -37,8 +37,8 @@ def besfun(n):
     return j1/j0**2
 
 def bn(n):
-    b = 10*da['betta']*da['P']
-    b/= sp.pi*da['c']*da['R']
+    b = 2*da['betta']*da['P']
+    b/= 5*sp.pi*da['c']*da['a']**2
     b/=bessel0(n)
     b*=besfun(n)
     return b

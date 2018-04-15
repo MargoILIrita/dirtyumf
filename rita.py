@@ -130,19 +130,3 @@ def allinone(ht, hr, time=100):
     for k in range(1, K, 1):
         w.append(back_stroke(ht,hr,I, ris,w[k-1]))
     return w
-
-
-
-#a = allinone(1, 0.1)
-#b = []
-#for t in numpy.arange(100):
-#   b.append([mm.u(step, t, 0.01) for step in numpy.arange(0, 5, 0.1)])
-
-x = [step for step in numpy.arange(0, 4.9, 0.1)]
-y1 = [mm.u(step,1, 0.01) for step in x]
-y2 = allinone(1,0.1,6)[1]
-
-ln0, ln1 = mpl.plot(x, y1, x, y2)
-mpl.legend((ln0, ln1),('Аналитическое','Численное'))
-mpl.grid()
-mpl.show()

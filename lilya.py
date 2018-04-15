@@ -33,7 +33,7 @@ def s0(w, ht):
 
 
 def ppi(hr, ht, ri):
-    return 1+ 2*gamma(ht, hr) + psi(ht)
+    return 1+ 2*gamma(ht, hr) + psi(ht) - gamma(ht, hr)*hr/ri
 
 
 def uui(ht, hr, ri):

@@ -10,8 +10,9 @@ import matplotlib.pyplot as mpl
 
 if __name__ == '__main__':
     print('start')
-    stepr = 0.1
+    stepr = 0.01
     stept = 1
+    curtime = 46
     riarr = [st for st in np.arange(0, 5 - stepr, stepr)]
     #pool = multiprocessing.Pool(processes=3, )
     #array = pool.map(xOy, [(stepr, stept, riarr, 'olya'),(stepr, stept, riarr, 'lilya'),(stepr, stept, riarr, 'rita')])
@@ -22,10 +23,10 @@ if __name__ == '__main__':
     wlilya = lilya.xOy(args)
     writa = rita.xOy(args)
     wolya = olya.xOy(args)
-    y1 = [mm.u(step,1, 0.1) for step in riarr]
-    y2 = wlilya[1]
-    y3 = [ele for ele in writa[1].flat]
-    y4 = wolya[1]
+    y1 = [mm.u(step,curtime, 0.1) for step in riarr]
+    y2 = wlilya[curtime]
+    y3 = [ele for ele in writa[curtime].flat]
+    y4 = wolya[curtime]
     print('{0}\n{1}\n{2}\n{3}'.format(y1,y2,y3,y4))
 
     ln0, ln1, ln2, ln3 = mpl.plot(riarr, y1, riarr, y2, riarr, y3, riarr, y4)

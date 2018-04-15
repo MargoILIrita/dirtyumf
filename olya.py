@@ -24,11 +24,11 @@ def pp0(ht, hr):
 
 
 def ppi(ht, hr, ri):
-    return 1 - 2*gamma(ht, hr) + 1/(hr*ri) - psi(ht)
+    return 1 - 2*gamma(ht, hr) + gamma(ht, hr) * hr/ri - psi(ht)
 
 
-def qqi(ht, hr, ri):
-    return gamma(ht, hr) - 1/(ri*hr)
+def uui(ht, hr, ri):
+    return gamma(ht, hr) - gamma(ht, hr)*hr/ri
 
 
 def ss0(ht):
@@ -43,7 +43,7 @@ def w0(w0, w1, ht, hr):
 
 
 def wi(wm, wi, wp, ri, ht, hr):
-    return wi*ppi(ht, hr, ri) + wm*qqi(ht,hr,ri) + wp*gamma(ht, hr) + ssi(ht, ri)
+    return wi*ppi(ht, hr, ri) + wm*uui(ht,hr,ri) + wp*gamma(ht, hr) + ssi(ht, ri)
 
 
 def wI(hr, w):

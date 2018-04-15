@@ -1,4 +1,7 @@
 import math
+import time
+import numpy as np
+
 import matplotlib.pyplot as mpl
 
 from plotly.utils import numpy
@@ -66,12 +69,41 @@ def wI(w, ri, ht, hr, betta, alfa):
     return (sI(w, ri, ht) - u*betta)/(pI(ht, hr, ri) + alfa*u)
 
 
-
 #w k m
 #bett for m+1 k, alf for m+1, w for m+1 k
 def wm(alf, bett, w):
     return alf*w + bett
 
+def xOy(args):
+    tt = time.time()
+    stepr, stept, riarr = args[0], args[1], args[2]
+    res = [np.zeros((riarr.__len__(), 1)), ]
+    for k in range(1, 100, stept):
+        len = riarr.__len__()-1
+        ss = []
+        j = 0
+        for ri in riarr[0:len]:
+            if (ri == 0):
+                ss.append([s0(0, stept), ])
+            else:
+                ss.append([ssi(res[k-1][j], ri, stept), ])
+            j += 1
+        s = np.matrix(ss)
+        a = np.zeros((len, len))
+        a[0, 0] = p0(stept, stepr)
+        a[0, 1] = -1 * q0(stept, stepr)
+        a[len - 1, len - 2] = -1 * uI(stepr, stept, riarr[len - 1])
+        a[len - 1, len - 1] = pI(stept, stepr, riarr[len - 1])
+        for i in np.arange(1, len - 1, 1):
+            a[i, i - 1] = -1 * uui(stept, stepr, riarr[i])
+            a[i, i] = ppi(stepr, stept, riarr[i])
+            a[i, i + 1] = -1 * qqi(stept, stepr, riarr[i])
+        temp = [ele for ele in np.linalg.solve(a, s).flat]
+        temp.append(temp[len-1])
+        res.append(temp)
+
+    print('finish process lilya' + ' {0:.2f}'.format(time.time()-tt))
+    return res
 
 
 

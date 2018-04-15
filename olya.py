@@ -1,7 +1,6 @@
 import math
-import matplotlib.pyplot as mpl
-
-from plotly.utils import numpy
+import time
+import numpy as np
 
 import mathmethods as mm
 
@@ -57,3 +56,12 @@ def all(w, ht, hr, ris):
         cur.append(wi(w[i-1], w[i], w[i+1], ris[i], ht, hr))
     cur.append(wI(hr, w[len-1]))
     return cur
+
+def xOy(args):
+    tt = time.time()
+    stepr, stept, riarr = args[0], args[1], args[2]
+    res = [np.zeros((riarr.__len__(), 1)), ]
+    for k in range(1, 100, stept):
+        res.append(all(res[k - 1], stept, stepr, riarr))
+    print('finish process olya' + ' {0:.2f}'.format(time.time()-tt))
+    return res

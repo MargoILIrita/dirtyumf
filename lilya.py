@@ -25,7 +25,7 @@ def p0(ht, hr):
 
 
 def q0(ht, hr):
-    return -4*gamma(ht,hr)
+    return 4*gamma(ht,hr)
 
 
 def s0(w, ht):
@@ -41,7 +41,7 @@ def uui(ht, hr, ri):
 
 
 def qqi(ht, hr, ri):
-    return -1*gamma(ht,hr)
+    return gamma(ht,hr)
 
 
 def ssi(w, ri, ht):
@@ -49,7 +49,7 @@ def ssi(w, ri, ht):
 
 
 def uI(hr, ht, ri):
-    return gamma(ht, hr)*hr/ri - gamma(ht,hr)
+    return gamma(ht,hr) - gamma(ht, hr) * hr/ri
 
 
 def pI(ht, hr, ri):
@@ -71,6 +71,7 @@ def wI(w, ri, ht, hr, betta, alfa):
 #bett for m+1 k, alf for m+1, w for m+1 k
 def wm(alf, bett, w):
     return alf*w + bett
+
 
 
 

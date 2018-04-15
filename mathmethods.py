@@ -38,13 +38,13 @@ def besfun(n):
 
 def bn(n):
     b = 2*da['betta']*da['P']
-    b/= 5*sp.pi*da['a']**2
+    b/= 5*sp.pi*da['c']*da['a']**2
     b/=bessel0(n)
     b*=besfun(n)
     return b
 
 def gamma(n):
-    g = (-1*bessel0(n)*bessel0(n)*da['k'])/(da['c']*da['R']**2)
+    g = (-1*bessel0(n)**(2)*da['k'])/(da['c']*da['R']**2)
     g-=2*da['alf']/(da['c']*da['l'])
     return g
 
@@ -55,10 +55,11 @@ def expY(n, t):
 def u(r,t, eco, dan=None):
     if dan != None:
         updateDA(dan)
-    u = -1*da['c']*da['l']*da['betta']*da['P'] * (sp.exp(-2*da['alf']*t/(da['c']*da['l'])) - 1)/(25*sp.pi*2*da['alf']*da['a']**2)
-    for i in np.arange(1,1000,1):
+    u = da['betta']*da['P']*expY(0,t)*spc.j0(0)
+    u /= gamma(0)*da['c']*np.pi*da['R']**2
+    for i in np.arange(1,100,1):
         mn = bessel0(i)
-        u +=bn(i) * expY(i, t) * spc.j0(mn * r / da['R']) / gamma(i)
+        u += bn(i) * expY(i, t) * spc.j0(mn * r / da['R']) / gamma(i)
     return u
 
 def graphR():

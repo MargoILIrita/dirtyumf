@@ -1,7 +1,6 @@
 import math
-import matplotlib.pyplot as mpl
-
-from plotly.utils import numpy
+import time
+import numpy as np
 
 import mathmethods as mm
 
@@ -25,11 +24,11 @@ def pp0(ht, hr):
 
 
 def ppi(ht, hr, ri):
-    return 1 - 2*gamma(ht, hr) + 1/(hr*ri) - psi(ht)
+    return 1 - 2*gamma(ht, hr) + gamma(ht, hr) * hr/ri - psi(ht)
 
 
-def qqi(ht, hr, ri):
-    return gamma(ht, hr) - 1/(ri*hr)
+def uui(ht, hr, ri):
+    return gamma(ht, hr) - gamma(ht, hr)*hr/ri
 
 
 def ss0(ht):
@@ -44,7 +43,7 @@ def w0(w0, w1, ht, hr):
 
 
 def wi(wm, wi, wp, ri, ht, hr):
-    return wi*ppi(ht, hr, ri) + wm*qqi(ht,hr,ri) + wp*gamma(ht, hr) + ssi(ht, ri)
+    return wi*ppi(ht, hr, ri) + wm*uui(ht,hr,ri) + wp*gamma(ht, hr) + ssi(ht, ri)
 
 
 def wI(hr, w):
@@ -53,7 +52,16 @@ def wI(hr, w):
 def all(w, ht, hr, ris):
     len = ris.__len__()
     cur = [w0(w[0], w[1], ht, hr),]
-    for i in range(1, len-1, 1):
+    for i in np.arange(1, len-1, ht):
         cur.append(wi(w[i-1], w[i], w[i+1], ris[i], ht, hr))
     cur.append(wI(hr, w[len-1]))
     return cur
+
+def xOy(args):
+    tt = time.time()
+    stepr, stept, riarr = args[0], args[1], args[2]
+    res = [np.zeros((riarr.__len__(), 1)), ]
+    for k in np.arange(1, 100, stept):
+        res.append(all(res[k - 1], stept, stepr, riarr))
+    print('finish process olya' + ' {0:.2f}'.format(time.time()-tt))
+    return res

@@ -1,7 +1,6 @@
 import math
-import matplotlib.pyplot as mpl
-
-from plotly.utils import numpy
+import numpy as np
+import time
 
 import mathmethods as mm
 
@@ -33,15 +32,15 @@ def s0(w, ht):
 
 
 def ppi(hr, ht, ri):
-    return 1+ 2*gamma(ht, hr) + psi(ht) - gamma(ht, hr)*hr/ri
+    return 1+ 2*gamma(ht, hr) + psi(ht)
 
 
 def uui(ht, hr, ri):
-    return gamma(ht, hr) - gamma(ht, hr)*hr/ri
+    return gamma(ht, hr) - gamma(ht, hr)*hr/(2*ri)
 
 
 def qqi(ht, hr, ri):
-    return gamma(ht,hr)
+    return gamma(ht,hr) + gamma(ht, hr)*hr/(2*ri)
 
 
 def ssi(w, ri, ht):
@@ -49,38 +48,15 @@ def ssi(w, ri, ht):
 
 
 def uI(hr, ht, ri):
-    return gamma(ht,hr) - gamma(ht, hr) * hr/ri
+    return 2*gamma(ht,hr)
 
 
 def pI(ht, hr, ri):
-    return 1 + gamma(ht, hr) - gamma(ht, hr)*hr/ri + psi(ht)
+    return 1 + 2*gamma(ht, hr) + psi(ht)
 
 
 def sI(w, ri, ht):
     return w + mm.da['betta']*ht*ir(ri)/mm.da['c']
-
-
-def alfa0(ht, hr):
-    return q0(ht, hr)/p0(ht, hr)
-
-
-def betta0(w, ht, hr):
-    return s0(w, ht)/p0(ht, hr)
-
-
-#alfa j
-#ri для j-1, alf для j-1
-def alfaj(ht, hr, ri, alfa):
-    return qqi(ht, hr, ri)/( ppi(ht, ht, ri) + uui(ht, hr, ri)* alfa)
-
-
-
-#b k-1 j
-#ri для j-1, alf для j-1, betta для j-1
-def bettaj(w, ri, ht, hr, betta, alfa):
-    u = uui(ht, hr, ri)
-    return (ssi(w, ri, ht) - u* betta)/(ppi(hr, ht, ri) + alfa*u)
-
 
 #w k I
 #betta for I k-1, alf for I
@@ -95,38 +71,31 @@ def wI(w, ri, ht, hr, betta, alfa):
 def wm(alf, bett, w):
     return alf*w + bett
 
+def xOy(args):
+    tt = time.time()
+    stepr, stept, riarr = args[0], args[1], args[2]
+    res = [np.zeros((riarr.__len__(), 1)), ]
+    for k in range(1, 100, stept):
+        len = riarr.__len__()
+        ss = []
+        j = 0
+        for ri in riarr:
+            if (ri == 0):
+                ss.append([s0(0, stept), ])
+            else:
+                ss.append([ssi(res[k-1][j], ri, stept), ])
+            j += 1
+        s = np.matrix(ss)
+        a = np.zeros((len, len))
+        a[0, 0] = p0(stept, stepr)
+        a[0, 1] = -1 * q0(stept, stepr)
+        a[len - 1, len - 2] = -1 * uI(stepr, stept, riarr[len - 1])
+        a[len - 1, len - 1] = pI(stept, stepr, riarr[len - 1])
+        for i in np.arange(1, len - 1, 1):
+            a[i, i - 1] = -1 * uui(stept, stepr, riarr[i])
+            a[i, i] = ppi(stepr, stept, riarr[i])
+            a[i, i + 1] = -1 * qqi(stept, stepr, riarr[i])
+        res.append(np.linalg.solve(a, s))
 
-def straight_run(ht, hr, I, ris, ws):
-    alfas = []
-    bettas = []
-    alfas.append(alfa0(ht, hr))
-    bettas.append(betta0(ws[0], ht, hr))
-    for j in range(1,I-1,1):
-        alfas.append(alfaj(ht, hr, ris[j], alfas[j-1]))
-        bettas.append(bettaj(ws[j], ris[j], ht, hr, bettas[j-1], alfas[j-1]))
-    return alfas, bettas, wI(ws[I-1],ris[I-1], ht, hr, bettas[I-2], alfas[I-2])
-
-
-def back_stroke(ht, hr, I, ris, ws):
-    alfas, bettas, wi = straight_run(ht, hr, I, ris, ws)
-    wnew = []
-    wnew.append(wi)
-    for i in range(I-2, -1, -1):
-        wnew.append(wm(alfas[i],bettas[i], wnew[I-i-2]))
-    wn = []
-    for i in range(I-1,-1,-1):
-        wn.append(wnew[i])
-   # print(wn)
-    return wn
-
-def allinone(ht, hr, time=100):
-    t = []
-    I = int(mm.da['R']/hr)-1
-    K = int(time/ht)
-    for i in range(I):
-        t.append(0)
-    w = [t,]
-    ris = [x for x in numpy.arange(0,mm.da['R'],hr)]
-    for k in range(1, K, 1):
-        w.append(back_stroke(ht,hr,I, ris,w[k-1]))
-    return w
+    print('finish process rita' + ' {0:.2f}'.format(time.time()-tt))
+    return res

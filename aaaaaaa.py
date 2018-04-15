@@ -20,13 +20,13 @@ def findW(w, ht, hr, ris, ls):
     s = np.matrix(s0)
     a = np.zeros((len,len))
     a[0,0] = ls.p0(ht,hr)
-    a[0,1] = ls.q0(ht,hr)
-    a[len-1,len-2] = ls.uI(hr, ht, ris[len-1])
+    a[0,1] = -1*ls.q0(ht,hr)
+    a[len-1,len-2] = -1*ls.uI(hr, ht, ris[len-1])
     a[len-1,len-1] = ls.pI(ht, hr, ris[len-1])
     for i in np.arange(1,len-1,1):
-        a[i, i-1] = ls.uui(ht, hr, ris[i])
+        a[i, i-1] = -1*ls.uui(ht, hr, ris[i])
         a[i, i] = ls.ppi(hr, ht, ris[i])
-        a[i,i+1] = ls.qqi(ht, hr, ris[i])
+        a[i,i+1] = -1*ls.qqi(ht, hr, ris[i])
     return np.linalg.solve(a,s)
 
 def xOy(args):

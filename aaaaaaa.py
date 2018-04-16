@@ -33,11 +33,11 @@ if __name__ == '__main__':
         da['P'] = float(P)
         da['a'] = float(R) / 5
 
-    stepr = float(input("Введите точность шаг по R "))
-    stept = int(input('и шаг по T '))
+    stepr = 5/int(input("Введите количество шагов по R "))
+    stept = int(100/int(input('и по T ')))
+    curtime = int(input("Введите момент времени "))
     print("Подождите, пожалуйста, выполняются вычисления...")
     print('start')
-    curtime = 46
     riarr = [st for st in np.arange(0, 5 - stepr, stepr)]
     #pool = multiprocessing.Pool(processes=3, )
     #array = pool.map(xOy, [(stepr, stept, riarr, 'olya'),(stepr, stept, riarr, 'lilya'),(stepr, stept, riarr, 'rita')])
@@ -57,9 +57,10 @@ if __name__ == '__main__':
     ln0, ln1, ln2, ln3 = mpl.plot(riarr, y1, riarr, y2, riarr, y3, riarr, y4)
     mpl.legend((ln0, ln1, ln2, ln3), ('Аналитическое', 'Численное Лиля', "Численное Рита", 'Численное Оля'),
                title='R: {0}, l: {1}, k: {2}, alf: {3}, c: {4}, betta: {5}, P: {6}, a: {7} \n step for R : {8} \n step '
-                     'for T: {9} '.format(mm.da['R'], mm.da['l'], mm.da['k'], mm.da['alf'], mm.da['c'], mm.da['betta'],
-                                          mm.da['P'], mm.da['a'], stepr, stept))
+                     'for T: {9} \n time = {10}'.format(mm.da['R'], mm.da['l'], mm.da['k'], mm.da['alf'], mm.da['c'], mm.da['betta'],
+                                          mm.da['P'], mm.da['a'], stepr, stept, curtime))
     mpl.grid()
     mpl.show()
 
+#make some dirty shit
 

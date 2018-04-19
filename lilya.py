@@ -9,7 +9,7 @@ from plotly.utils import numpy
 import mathmethods as mm
 
 def ir(ri):
-    if(0 <= ri <= mm.da['a']):
+    if(ri <= mm.da['a']):
         a = mm.da['P']/(math.pi*mm.da['a']**2)
         return a
     return 0

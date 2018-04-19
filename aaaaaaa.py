@@ -37,8 +37,7 @@ if __name__ == '__main__':
     stept = int(100/int(input('и по T ')))
     curtime = int(input("Введите момент времени "))
     print("Подождите, пожалуйста, выполняются вычисления...")
-    print('start')
-    riarr = [st for st in np.arange(0, 5 - stepr, stepr)]
+    riarr = [st for st in np.arange(0, 5 , stepr)]
     #pool = multiprocessing.Pool(processes=3, )
     #array = pool.map(xOy, [(stepr, stept, riarr, 'olya'),(stepr, stept, riarr, 'lilya'),(stepr, stept, riarr, 'rita')])
     #print('finish count new methods' + ' {0:.2f}'.format(time.time()-tt))
@@ -52,10 +51,10 @@ if __name__ == '__main__':
     y2 = wlilya[curtime]
     y3 = [ele for ele in writa[curtime].flat]
     y4 = wolya[curtime]
-    print('{0}\n{1}\n{2}\n{3}'.format(y1,y2,y3,y4))
+    #print('{0}\n{1}\n{2}\n{3}'.format(y1,y2,y3,y4))
 
-    ln0, ln1, ln2, ln3 = mpl.plot(riarr, y1, riarr, y2, riarr, y3, riarr, y4)
-    mpl.legend((ln0, ln1, ln2, ln3), ('Аналитическое', 'Численное Лиля', "Численное Рита", 'Численное Оля'),
+    ln0, ln1, ln2 = mpl.plot(riarr, y1, riarr, y2, riarr, y3)
+    mpl.legend((ln0, ln1, ln2), ('Аналитическое', 'Численное Лиля', "Численное Рита"),
                title='R: {0}, l: {1}, k: {2}, alf: {3}, c: {4}, betta: {5}, P: {6}, a: {7} \n step for R : {8} \n step '
                      'for T: {9} \n time = {10}'.format(mm.da['R'], mm.da['l'], mm.da['k'], mm.da['alf'], mm.da['c'], mm.da['betta'],
                                           mm.da['P'], mm.da['a'], stepr, stept, curtime))

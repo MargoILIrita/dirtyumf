@@ -5,7 +5,7 @@ import time
 import mathmethods as mm
 
 def ir(ri):
-    if(0 <= ri <= mm.da['a']):
+    if(ri <= mm.da['a']):
         a = mm.da['P']/(math.pi*mm.da['a']**2)
         return a
     return 0
@@ -32,7 +32,7 @@ def s0(w, ht):
 
 
 def ppi(hr, ht, ri):
-    return 1+ 2*gamma(ht, hr) + psi(ht)
+    return 1 + 2*gamma(ht, hr) + psi(ht)
 
 
 def uui(ht, hr, ri):

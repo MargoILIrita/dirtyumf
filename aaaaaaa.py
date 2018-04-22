@@ -46,12 +46,12 @@ if __name__ == '__main__':
     args =(stepr, stept, riarr)
     wlilya = lilya.xOy(args)
     writa = rita.xOy(args)
-    wolya = olya.xOy(args)
+    #wolya = olya.xOy(args)
     y1 = [mm.u(step,curtime, 0.1) for step in riarr]
     y2 = wlilya[curtime]
     y3 = [ele for ele in writa[curtime].flat]
-    y4 = wolya[curtime]
-    #print('{0}\n{1}\n{2}\n{3}'.format(y1,y2,y3,y4))
+    #y4 = wolya[curtime]
+    #print('{0}\n{1}\n{2}'.format(y1,y2,y3))
 
     ln0, ln1, ln2 = mpl.plot(riarr, y1, riarr, y2, riarr, y3)
     mpl.legend((ln0, ln1, ln2), ('Аналитическое', 'Численное Лиля', "Численное Рита"),

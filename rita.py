@@ -24,7 +24,7 @@ def p0(ht, hr):
 
 
 def q0(ht, hr):
-    return 4*gamma(ht,hr)
+    return 4*gamma(ht,hr)+1
 
 
 def s0(w, ht):

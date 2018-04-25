@@ -34,7 +34,7 @@ if __name__ == '__main__':
         da['a'] = float(R) / 5
 
     stepr = 5/int(input("Введите количество шагов по R "))
-    stept = int(100/int(input('и по T ')))
+    stept = 100/int(input('и по T '))
     curtime = int(input("Введите момент времени "))
     print("Подождите, пожалуйста, выполняются вычисления...")
     riarr = [st for st in np.arange(0, 5 , stepr)]
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     writa = rita.xOy(args)
     #wolya = olya.xOy(args)
     y1 = [mm.u(step,curtime, 0.1) for step in riarr]
-    y2 = wlilya[curtime]
-    y3 = [ele for ele in writa[curtime].flat]
+    y2 = wlilya[int(curtime/stept)]
+    y3 = [ele for ele in writa[int(curtime/stept)].flat]
     #y4 = wolya[curtime]
     #print('{0}\n{1}\n{2}'.format(y1,y2,y3))
 
@@ -58,6 +58,8 @@ if __name__ == '__main__':
                title='R: {0}, l: {1}, k: {2}, alf: {3}, c: {4}, betta: {5}, P: {6}, a: {7} \n step for R : {8} \n step '
                      'for T: {9} \n time = {10}'.format(mm.da['R'], mm.da['l'], mm.da['k'], mm.da['alf'], mm.da['c'], mm.da['betta'],
                                           mm.da['P'], mm.da['a'], stepr, stept, curtime))
+    mpl.xlabel('Radius')
+    mpl.ylabel('Temperature')
     mpl.grid()
     mpl.show()
 

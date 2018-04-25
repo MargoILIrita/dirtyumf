@@ -75,7 +75,7 @@ def xOy(args):
     tt = time.time()
     stepr, stept, riarr = args[0], args[1], args[2]
     res = [np.zeros((riarr.__len__(), 1)), ]
-    for k in range(1, 100, stept):
+    for k in range(1, int(100/stept), 1):
         len = riarr.__len__()
         ss = []
         j = 0

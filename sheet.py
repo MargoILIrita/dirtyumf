@@ -1,44 +1,43 @@
-import  mathmethods as mm
 import numpy as np
-import  scipy as sp
-import scipy.special
+import lilya
+import rita
+import  mathmethods as mm
 
-d = mm.da
-
-def a(n):
-    if n > 10000000:
-        return 0
-    mn = mm.bessel0(i)
-    return mm.bn(i) * mm.expY(n, 12) * sp.special.j0(mn * 2 / d['R']) / mm.gamma(n)
+def count_step_analytic(T, R):
+    return [mm.u(r, T, 0.01) for r in R]
 
 
-def u(y):
-    u = -1*d['c']*d['l']*d['betta']*d['P'] * (sp.exp(-2*d['alf']*12/(d['c']*d['l'])) - 1)/(25*sp.pi*2*d['alf']*d['a']**2)
-    for i in np.arange(1,y,1):
-        u += a(i)
-    return u
+def count_analytic(R, ht):
+    return [count_step_analytic(k*ht,R) for k in np.arange(0,int(100/ht),1)]
 
 
-def nt(eps):
-    RT = mm.rt(1)
-    nx=1
-    while(RT > eps):
-        nx+=1
-        RT = mm.rt(nx)
-    return nx
+def compute_step(I, K, pervmaxl=0, isLylya=True):
+    hr = 5/I
+    ht = 100/K
+    R = [x for x in np.arange(0,5+hr, hr)]
+    analytic = np.array(count_analytic(R,ht)[1:])
+    if isLylya:
+        girl = np.array(lilya.xOy((hr, ht, R))[1:])
+    else:
+        girl = np.array(rita.xOy((hr, ht, R[0:-1]))[1:])
+    delta = girl-analytic
+    max = delta.max()
+    print("I {0} K {1} {2}  {3} d {4}".format(I, K, "Lilia" if isLylya else "Rita" ,max, pervmaxl/max))
+    return max
 
+I = 10
+K = 50
+m = 0
+for i in range(4):
+     m = compute_step(I, K, m)
+     K*=2
+     I*=2
 
-def npp(eps, nz):
-    start = u(nz)
-    stop = start-a(nz-1)
-    while(nz>0) and (eps > abs(start-stop)):
-     nz-=1
-     stop-=a(nz-1)
-    return nz
-
-
-for i in range(1,5,1):
-    eps = 10**(-i)
-    bt =nt(eps)
-    print("Eps {0} Nteory {1} Nprac {2}".format(eps, bt, npp(eps, bt)))
+I = 5
+K = 50
+m = 0
+for i in range(4):
+    m = compute_step(I, K, m, False)
+    K *= 2
+    I *= 4
 

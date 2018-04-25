@@ -77,7 +77,7 @@ def wm(alf, bett, w):
 def xOy(args):
     tt = time.time()
     stepr, stept, riarr = args[0], args[1], args[2]
-    res = [np.zeros((riarr.__len__(), 1)), ]
+    res = [np.zeros(riarr.__len__()), ]
     for k in np.arange(1, int(100/stept), 1):
         len = riarr.__len__()-1
         ss = []

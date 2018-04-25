@@ -74,7 +74,7 @@ def wm(alf, bett, w):
 def xOy(args):
     tt = time.time()
     stepr, stept, riarr = args[0], args[1], args[2]
-    res = [np.zeros((riarr.__len__(), 1)), ]
+    res = [np.zeros(riarr.__len__()), ]
     for k in range(1, int(100/stept), 1):
         len = riarr.__len__()
         ss = []
@@ -95,7 +95,9 @@ def xOy(args):
             a[i, i - 1] = -1 * uui(stept, stepr, riarr[i])
             a[i, i] = ppi(stepr, stept, riarr[i])
             a[i, i + 1] = -1 * qqi(stept, stepr, riarr[i])
-        res.append(np.linalg.solve(a, s))
+        temp = [ele for ele in np.linalg.solve(a, s).flat]
+        temp.append(temp[len-1])
+        res.append(temp)
 
     print('finish process rita' + ' {0:.2f}'.format(time.time()-tt))
     return res
